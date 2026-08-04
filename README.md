@@ -1,6 +1,6 @@
-# Vector Forge
+# Text Embedder
 
-Vector Forge is an educational Streamlit application that creates and visualizes text embeddings from scratch. It uses statistical word relationships and linear algebra instead of a pretrained embedding model or external API.
+Text Embedder is an educational Streamlit application that creates and visualizes text embeddings from scratch. It uses statistical word relationships and linear algebra instead of a pretrained embedding model or external API.
 
 Users provide a training corpus and one or more sentences. The application builds a temporary embedding space from that corpus, generates word and sentence vectors, and exposes each stage of the process in the UI.
 
@@ -77,8 +77,8 @@ embeddings/
 ### 1. Clone the repository
 
 ```powershell
-git clone https://github.com/YOUR_USERNAME/vector-forge.git
-cd vector-forge
+git clone https://github.com/YOUR_USERNAME/text-embedder.git
+cd text-embedder
 ```
 
 Replace `YOUR_USERNAME` with your GitHub username.
