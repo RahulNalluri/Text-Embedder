@@ -153,6 +153,4 @@ The next phase will retain the current custom-corpus laboratory and add a second
 - pandas
 - `unittest`
 
-## License
 
-No license has been selected yet. Add a license before inviting others to copy, modify, or redistribute the project.
