@@ -1,0 +1,2 @@
+company_name,sector,nse_symbol,bse_code,cin,financial_year,official_ir_url,report_url,local_filename,source_status,permission_status,notes
+Example Company Limited,example_sector,EXAMPLE,,,FY2024-25,https://example.com/investor-relations/annual-reports,,,needs_verification,review_required,Replace this fictional row in your local companies.csv

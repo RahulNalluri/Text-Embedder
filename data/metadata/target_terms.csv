@@ -1,0 +1,145 @@
+term,category,priority
+revenue from operations,financial_performance,core
+turnover,financial_performance,core
+operating revenue,financial_performance,core
+gross profit,financial_performance,core
+operating profit,financial_performance,core
+ebit,financial_performance,supplemental
+ebitda,financial_performance,core
+profit before tax,financial_performance,core
+pbt,financial_performance,core
+profit after tax,financial_performance,core
+pat,financial_performance,core
+net profit,financial_performance,core
+earnings per share,financial_performance,core
+eps,financial_performance,core
+operating margin,financial_performance,core
+net profit margin,financial_performance,core
+exceptional items,financial_performance,core
+other comprehensive income,financial_performance,core
+total comprehensive income,financial_performance,core
+year on year,financial_performance,supplemental
+assets,balance_sheet,core
+current assets,balance_sheet,core
+non-current assets,balance_sheet,core
+liabilities,balance_sheet,core
+current liabilities,balance_sheet,core
+non-current liabilities,balance_sheet,core
+shareholders equity,balance_sheet,core
+share capital,balance_sheet,core
+reserves and surplus,balance_sheet,core
+retained earnings,balance_sheet,core
+trade receivables,balance_sheet,core
+trade payables,balance_sheet,core
+inventories,balance_sheet,core
+cash and cash equivalents,balance_sheet,core
+provisions,balance_sheet,core
+contingent liabilities,balance_sheet,core
+goodwill,balance_sheet,core
+operating cash flow,cash_flow_and_liquidity,core
+investing activities,cash_flow_and_liquidity,core
+financing activities,cash_flow_and_liquidity,core
+working capital,cash_flow_and_liquidity,core
+liquidity,cash_flow_and_liquidity,core
+capital expenditure,cash_flow_and_liquidity,core
+free cash flow,cash_flow_and_liquidity,supplemental
+credit facility,cash_flow_and_liquidity,core
+debt maturity,cash_flow_and_liquidity,core
+cash conversion cycle,cash_flow_and_liquidity,supplemental
+borrowings,cash_flow_and_liquidity,core
+ind as,accounting_and_ind_as,core
+revenue recognition,accounting_and_ind_as,core
+expected credit loss,accounting_and_ind_as,core
+impairment,accounting_and_ind_as,core
+depreciation,accounting_and_ind_as,core
+amortisation,accounting_and_ind_as,core
+fair value,accounting_and_ind_as,core
+deferred tax,accounting_and_ind_as,core
+current tax,accounting_and_ind_as,core
+lease liability,accounting_and_ind_as,core
+right-of-use asset,accounting_and_ind_as,core
+related party,accounting_and_ind_as,core
+segment reporting,accounting_and_ind_as,core
+standalone financial statements,accounting_and_ind_as,core
+consolidated financial statements,accounting_and_ind_as,core
+dividend,corporate_actions,core
+interim dividend,corporate_actions,core
+final dividend,corporate_actions,core
+bonus issue,corporate_actions,core
+rights issue,corporate_actions,core
+qualified institutional placement,corporate_actions,core
+qip,corporate_actions,core
+preferential allotment,corporate_actions,core
+share buyback,corporate_actions,core
+stock split,corporate_actions,supplemental
+merger,corporate_actions,core
+acquisition,corporate_actions,core
+demerger,corporate_actions,core
+non-convertible debenture,corporate_actions,core
+ncd,corporate_actions,core
+debenture,corporate_actions,core
+board of directors,corporate_governance,core
+independent director,corporate_governance,core
+audit committee,corporate_governance,core
+nomination and remuneration committee,corporate_governance,core
+stakeholders relationship committee,corporate_governance,core
+promoter,corporate_governance,core
+promoter group,corporate_governance,core
+public shareholding,corporate_governance,core
+material subsidiary,corporate_governance,core
+related-party transaction,corporate_governance,core
+key managerial personnel,corporate_governance,core
+kmp,corporate_governance,core
+secretarial audit,corporate_governance,core
+internal financial controls,corporate_governance,core
+material weakness,corporate_governance,core
+market risk,risk_management,core
+credit risk,risk_management,core
+liquidity risk,risk_management,core
+interest rate risk,risk_management,core
+foreign exchange risk,risk_management,core
+commodity price risk,risk_management,core
+cybersecurity risk,risk_management,core
+regulatory risk,risk_management,core
+supply chain disruption,risk_management,core
+business continuity,risk_management,core
+gross non-performing assets,banking,sector
+gross npa,banking,sector
+net non-performing assets,banking,sector
+net npa,banking,sector
+casa,banking,sector
+provisioning,banking,sector
+advances,banking,sector
+deposits,banking,sector
+capital adequacy,banking,sector
+crar,banking,sector
+net interest margin,banking,sector
+credit cost,banking,sector
+loan book,banking,sector
+business responsibility and sustainability report,sustainability,core
+brsr,sustainability,core
+environmental social and governance,sustainability,core
+esg,sustainability,core
+corporate social responsibility,sustainability,core
+csr,sustainability,core
+greenhouse gas emissions,sustainability,core
+energy consumption,sustainability,core
+water consumption,sustainability,core
+scope 1 emissions,sustainability,supplemental
+scope 2 emissions,sustainability,supplemental
+workforce diversity,sustainability,core
+sebi,regulatory,core
+listing obligations and disclosure requirements,regulatory,core
+lodr,regulatory,core
+ministry of corporate affairs,regulatory,core
+mca,regulatory,core
+registrar of companies,regulatory,core
+roc,regulatory,core
+companies act,regulatory,core
+annual return,regulatory,core
+statutory auditor,regulatory,core
+qualified audit opinion,regulatory,core
+financial year,indian_reporting,core
+crore,indian_reporting,core
+lakh,indian_reporting,core
+rupees,indian_reporting,core

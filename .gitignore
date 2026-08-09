@@ -32,3 +32,13 @@ dist/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Locally collected company reports and generated corpora
+data/metadata/companies.csv
+data/raw/annual_reports/
+data/processed/*.csv
+data/processed/*.txt
+data/processed/*.json
+
+# Temporary training runs
+training_runs/
