@@ -50,6 +50,24 @@ class TestPreprocessing(unittest.TestCase):
             ["revenue", "was", "rupee", "<number>", "crore", "up", "<number>", "percent"],
         )
 
+    def test_preserves_words_with_curly_apostrophes(self):
+        normalized = normalize_pdf_text("The Company\u2019s revenue increased.")
+
+        self.assertEqual(normalized, "The Company's revenue increased.")
+        self.assertEqual(
+            tokenize_financial_sentence(normalized),
+            ["the", "company's", "revenue", "increased"],
+        )
+
+    def test_repairs_spaced_pdf_possessives(self):
+        normalized = normalize_pdf_text("The Bank ' s liquidity improved.")
+
+        self.assertEqual(normalized, "The Bank's liquidity improved.")
+        self.assertEqual(
+            tokenize_financial_sentence(normalized),
+            ["the", "bank's", "liquidity", "improved"],
+        )
+
     def test_prepares_only_sentences_meeting_minimum_length(self):
         sentences = preprocess_text(
             "Strong growth. Revenue increased by 12%. Cash flow improved significantly."
