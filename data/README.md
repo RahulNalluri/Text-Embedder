@@ -34,13 +34,16 @@ The first pilot targets one company from each of six sectors and two completed f
 
 ## Generated files
 
-Later phases will produce:
+The processing and phrase-detection stages produce:
 
 ```text
-data/processed/sentences.csv
 data/processed/sentences.txt
 data/processed/vocabulary_counts.csv
 data/processed/corpus_report.json
+data/processed/quality_report.json
+data/processed/sentences_phrased.txt
+data/processed/phrase_counts.csv
+data/processed/phrase_report.json
 ```
 
 These generated files should be reproducible from the source manifest and processing scripts.
