@@ -42,3 +42,6 @@ data/processed/*.json
 
 # Temporary training runs
 training_runs/
+
+# Reproducible local trained-model artifacts
+artifacts/indian_financial/

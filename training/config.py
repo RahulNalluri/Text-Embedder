@@ -17,6 +17,7 @@ class TrainingConfig:
     """Hyperparameters shared by collection, training, and evaluation."""
 
     domain_name: str = "indian_corporate_financial_reporting"
+    architecture: str = "skip_gram"
     context_window: int = 3
     embedding_dimension: int = 50
     negative_samples: int = 5
@@ -24,6 +25,7 @@ class TrainingConfig:
     epochs: int = 5
     learning_rate: float = 0.025
     random_seed: int = 42
+    workers: int = 1
 
     def __post_init__(self) -> None:
         positive_integer_fields = {
@@ -32,6 +34,7 @@ class TrainingConfig:
             "negative_samples": self.negative_samples,
             "minimum_word_frequency": self.minimum_word_frequency,
             "epochs": self.epochs,
+            "workers": self.workers,
         }
 
         for field_name, value in positive_integer_fields.items():
@@ -44,6 +47,9 @@ class TrainingConfig:
             raise ValueError(
                 "learning_rate must be greater than 0 and at most 1."
             )
+
+        if self.architecture not in {"skip_gram", "cbow"}:
+            raise ValueError("architecture must be either 'skip_gram' or 'cbow'.")
 
     def to_dict(self) -> dict[str, object]:
         """Return a JSON-serializable representation of the settings."""
