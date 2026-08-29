@@ -21,6 +21,7 @@ DEFAULT_NEIGHBOUR_TERMS = (
     "credit_risk", "working_capital", "fair_value",
     "cash_and_cash_equivalents", "operating_profit",
 )
+KNOWN_VALID_TRUNCATION_COLLISIONS = {"missions"}
 
 
 @dataclass(frozen=True, slots=True)
@@ -227,7 +228,11 @@ def find_suspicious_tokens(
             suspicious[token] = "unusually long token"
     for target in atomic_targets:
         truncated = target[1:]
-        if truncated in vocabulary and truncated not in atomic_targets:
+        if (
+            truncated in vocabulary
+            and truncated not in atomic_targets
+            and truncated not in KNOWN_VALID_TRUNCATION_COLLISIONS
+        ):
             suspicious[truncated] = f"possible missing first character from '{target}'"
     return [{"token": token, "reason": suspicious[token]} for token in sorted(suspicious)[:limit]]
 

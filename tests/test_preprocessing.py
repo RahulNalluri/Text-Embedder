@@ -22,6 +22,11 @@ class TestPreprocessing(unittest.TestCase):
             "Annual Report and performance were certain. The committee approved it.",
         )
 
+    def test_repairs_observed_financial_word_artifact(self):
+        normalized = normalize_pdf_text("Are your /f_inancial goals in sync?")
+
+        self.assertEqual(normalized, "Are your financial goals in sync?")
+
     def test_restores_rupee_symbol_and_joins_broken_words(self):
         normalized = normalize_pdf_text(
             "Revenue was /uni20B9100 crore and per-\nformance improved."
@@ -67,6 +72,27 @@ class TestPreprocessing(unittest.TestCase):
             tokenize_financial_sentence(normalized),
             ["the", "bank's", "liquidity", "improved"],
         )
+
+    def test_repairs_confirmed_split_financial_words(self):
+        normalized = normalize_pdf_text(
+            "R evenue r ecognition affects pr ofit. "
+            "Cash and cash equiv alents support the b usiness. "
+            "Trade r eceivables and e quity were reported. "
+            "Revenue was r ecognised fr om operations."
+        )
+
+        self.assertEqual(
+            normalized,
+            "revenue recognition affects profit. "
+            "Cash and cash equivalents support the business. "
+            "Trade receivables and equity were reported. "
+            "Revenue was recognised from operations.",
+        )
+
+    def test_does_not_repair_valid_word_that_resembles_a_fragment(self):
+        normalized = normalize_pdf_text("Government missions support employment.")
+
+        self.assertEqual(normalized, "Government missions support employment.")
 
     def test_prepares_only_sentences_meeting_minimum_length(self):
         sentences = preprocess_text(

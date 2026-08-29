@@ -23,7 +23,7 @@ class TestModelEvaluation(unittest.TestCase):
         self.directory = Path(self.temporary_directory.name)
         vectors = KeyedVectors(vector_size=3)
         vectors.add_vectors(
-            ["revenue", "profit", "net_profit", "profit_after_tax", "cybersecurity", "evenue"],
+            ["revenue", "profit", "net_profit", "profit_after_tax", "cybersecurity", "evenue", "missions"],
             np.asarray([
                 [1.0, 0.0, 0.0],
                 [0.9, 0.1, 0.0],
@@ -31,6 +31,7 @@ class TestModelEvaluation(unittest.TestCase):
                 [0.0, 0.9, 0.1],
                 [-1.0, 0.0, 0.0],
                 [0.95, 0.05, 0.0],
+                [0.0, 0.0, 1.0],
             ], dtype=np.float32),
         )
         vectors.save(str(self.directory / "vectors.kv"))
@@ -38,7 +39,7 @@ class TestModelEvaluation(unittest.TestCase):
             json.dumps({
                 "model_name": "test_financial_word2vec",
                 "configuration": {"embedding_dimension": 3},
-                "training": {"retained_vocabulary_size": 6},
+                "training": {"retained_vocabulary_size": 7},
             }),
             encoding="utf-8",
         )
@@ -64,6 +65,7 @@ class TestModelEvaluation(unittest.TestCase):
         self.assertEqual(report["target_coverage"]["overall"]["evaluable_terms"], 3)
         self.assertEqual(report["target_coverage"]["not_evaluable_terms"], ["scope 1 emissions"])
         self.assertIn("evenue", {row["token"] for row in report["suspicious_tokens"]})
+        self.assertNotIn("missions", {row["token"] for row in report["suspicious_tokens"]})
 
     def test_custom_pairs_separate_related_terms(self):
         vectors = KeyedVectors.load(str(self.directory / "vectors.kv"), mmap="r")

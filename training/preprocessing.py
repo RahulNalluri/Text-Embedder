@@ -6,11 +6,39 @@ import unicodedata
 
 LIGATURE_ARTIFACT_PATTERN = re.compile(r"/([a-z])_([a-z])\.liga", re.IGNORECASE)
 RUPEE_ARTIFACT_PATTERN = re.compile(r"/uni20b9", re.IGNORECASE)
+FINANCIAL_ARTIFACT_PATTERN = re.compile(r"/f_inancial\b", re.IGNORECASE)
 BROKEN_WORD_PATTERN = re.compile(r"(?<=\w)-[ \t]*\n[ \t]*(?=\w)")
 SPACED_POSSESSIVE_PATTERN = re.compile(r"(?<=\w)\s*'\s*s\b", re.IGNORECASE)
 SENTENCE_BOUNDARY_PATTERN = re.compile(r"(?<=[.!?])\s+")
 TOKEN_PATTERN = re.compile(r"[a-z]+(?:'[a-z]+)?|₹|%|\d+(?:[,.]\d+)*", re.IGNORECASE)
 NUMBER_PATTERN = re.compile(r"\d+(?:[,.]\d+)*")
+OBSERVED_SPLIT_WORD_REPAIRS = (
+    (re.compile(r"\bunr\s+ecognised\b", re.IGNORECASE), "unrecognised"),
+    (re.compile(r"\bder\s+ecognised\b", re.IGNORECASE), "derecognised"),
+    (re.compile(r"\bder\s+ecognition\b", re.IGNORECASE), "derecognition"),
+    (re.compile(r"\bequiv\s+alents\b", re.IGNORECASE), "equivalents"),
+    (re.compile(r"\bpr\s+ofit\b", re.IGNORECASE), "profit"),
+    (re.compile(r"\br\s+eceivables\b", re.IGNORECASE), "receivables"),
+    (re.compile(r"\br\s+ecognition\b", re.IGNORECASE), "recognition"),
+    (re.compile(r"\br\s+ecognised\b", re.IGNORECASE), "recognised"),
+    (re.compile(r"\br\s+egulatory\b", re.IGNORECASE), "regulatory"),
+    (re.compile(r"\br\s+elated\b", re.IGNORECASE), "related"),
+    (re.compile(r"\br\s+emuneration\b", re.IGNORECASE), "remuneration"),
+    (re.compile(r"\br\s+eporting\b", re.IGNORECASE), "reporting"),
+    (re.compile(r"\br\s+eport\b", re.IGNORECASE), "report"),
+    (re.compile(r"\br\s+esponsibility\b", re.IGNORECASE), "responsibility"),
+    (re.compile(r"\br\s+evenue\b", re.IGNORECASE), "revenue"),
+    (re.compile(r"\bf\s+inancial\b", re.IGNORECASE), "financial"),
+    (re.compile(r"\ba\s+nnual\b", re.IGNORECASE), "annual"),
+    (re.compile(r"\bf\s+oreign\b", re.IGNORECASE), "foreign"),
+    (re.compile(r"\be\s+quity\b", re.IGNORECASE), "equity"),
+    (re.compile(r"\bb\s+usiness\b", re.IGNORECASE), "business"),
+    (re.compile(r"\bs\s+ustainability\b", re.IGNORECASE), "sustainability"),
+    (re.compile(r"\bfr\s+amework\b", re.IGNORECASE), "framework"),
+    (re.compile(r"\bfr\s+ont\b", re.IGNORECASE), "front"),
+    (re.compile(r"\bfr\s+ee\b", re.IGNORECASE), "free"),
+    (re.compile(r"\bfr\s+om\b", re.IGNORECASE), "from"),
+)
 
 
 def normalize_pdf_text(text: str) -> str:
@@ -29,8 +57,11 @@ def normalize_pdf_text(text: str) -> str:
     normalized = normalized.replace("\u2018", "'").replace("\u2019", "'")
     normalized = SPACED_POSSESSIVE_PATTERN.sub("'s", normalized)
     normalized = RUPEE_ARTIFACT_PATTERN.sub("₹", normalized)
+    normalized = FINANCIAL_ARTIFACT_PATTERN.sub("financial", normalized)
     normalized = LIGATURE_ARTIFACT_PATTERN.sub(r"\1\2", normalized)
     normalized = BROKEN_WORD_PATTERN.sub("", normalized)
+    for pattern, replacement in OBSERVED_SPLIT_WORD_REPAIRS:
+        normalized = pattern.sub(replacement, normalized)
 
     paragraphs = []
     for paragraph in re.split(r"\n\s*\n+", normalized):
