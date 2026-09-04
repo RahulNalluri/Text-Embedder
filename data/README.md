@@ -12,7 +12,11 @@ data/
 |   |-- evaluation_pairs.csv
 |   `-- target_terms.csv
 |-- raw/
-|   `-- annual_reports/
+|   `-- annual_reports/ (local and ignored by Git)
+|       `-- version_3/
+|           |-- candidates/
+|           |-- approved/
+|           `-- rejected/
 `-- processed/
 ```
 
@@ -28,6 +32,45 @@ ignored by Git so company selections and report URLs are not published.
 - Do not automate collection from NSE; its terms prohibit systematic automated collection.
 - Keep complete annual-report PDFs local unless redistribution permission is confirmed.
 - Do not commit extracted full-text corpora until their redistribution status is reviewed.
+
+## Version 3 report staging
+
+New reports must be downloaded into `raw/annual_reports/version_3/candidates/`.
+A downloaded PDF is not training data until its source, identity, completeness,
+and extraction quality have been checked.
+
+Use the three staging folders as follows:
+
+| Folder | Purpose | May be used for training? |
+|---|---|---:|
+| `candidates/` | Newly downloaded reports awaiting validation | No |
+| `approved/` | Complete reports that passed source and extraction checks | Yes |
+| `rejected/` | Invalid, duplicate, incomplete, or low-quality reports retained for review | No |
+
+The existing Version 2 PDFs remain in their current location and must not be
+moved or renamed while the Version 2 baseline is being preserved.
+
+### Candidate-to-approved workflow
+
+1. Download one complete English annual or integrated report from an official
+   company investor-relations page.
+2. Save it in `candidates/` using the format
+   `company_name_fyYYYY_YY.pdf`.
+3. Add its company, sector, financial year, source URL, and local filename to
+   the private `metadata/companies.csv` manifest.
+4. Confirm that the file opens, is a PDF, is not password-protected, and is not
+   a duplicate of an existing report.
+5. Run the project's PDF extraction check and review its page counts and
+   possible scanned pages.
+6. Confirm that the report contains substantive financial statements, notes,
+   governance information, and management discussion.
+7. Move a passing report to `approved/` and set its manifest status to
+   `approved`.
+8. Move a failing report to `rejected/` and record the rejection reason in the
+   manifest. Do not silently delete it or include it in training.
+
+The corpus builder accepts explicit `--pdf` arguments. Only paths inside the
+`approved/` folder should be supplied when building the Version 3 corpus.
 
 ## Pilot design
 
