@@ -9,6 +9,7 @@ data/
 |-- metadata/
 |   |-- companies.example.csv
 |   |-- companies.csv (local and ignored by Git)
+|   |-- evaluation_pairs.csv
 |   `-- target_terms.csv
 |-- raw/
 |   `-- annual_reports/

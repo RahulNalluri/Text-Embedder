@@ -53,12 +53,39 @@ class TestModelEvaluation(unittest.TestCase):
                 {"term": "credit risk", "category": "risk", "priority": "core"},
                 {"term": "scope 1 emissions", "category": "sustainability", "priority": "supplemental"},
             ])
+        self.evaluation_pairs_path = self.directory / "evaluation_pairs.csv"
+        with self.evaluation_pairs_path.open("w", encoding="utf-8", newline="") as file:
+            writer = csv.DictWriter(
+                file,
+                fieldnames=["first", "second", "relationship", "category", "rationale"],
+            )
+            writer.writeheader()
+            writer.writerows([
+                {
+                    "first": "revenue",
+                    "second": "profit",
+                    "relationship": "related",
+                    "category": "performance",
+                    "rationale": "Both are financial performance measures",
+                },
+                {
+                    "first": "revenue",
+                    "second": "cybersecurity",
+                    "relationship": "unrelated",
+                    "category": "control",
+                    "rationale": "They represent different reporting subjects",
+                },
+            ])
 
     def tearDown(self):
         self.temporary_directory.cleanup()
 
     def test_evaluates_coverage_similarity_and_noise(self):
-        report = evaluate_saved_model(self.directory, self.target_terms_path)
+        report = evaluate_saved_model(
+            self.directory,
+            self.target_terms_path,
+            self.evaluation_pairs_path,
+        )
 
         self.assertTrue(report["technical_validation"]["passed"])
         self.assertEqual(report["target_coverage"]["overall"]["covered_terms"], 2)
@@ -85,7 +112,11 @@ class TestModelEvaluation(unittest.TestCase):
         self.assertEqual(benchmark["pairwise_separation_accuracy"], 1.0)
 
     def test_saves_evaluation_report(self):
-        report = evaluate_saved_model(self.directory, self.target_terms_path)
+        report = evaluate_saved_model(
+            self.directory,
+            self.target_terms_path,
+            self.evaluation_pairs_path,
+        )
         output_path = save_evaluation_report(report, self.directory)
 
         saved = json.loads(output_path.read_text(encoding="utf-8"))

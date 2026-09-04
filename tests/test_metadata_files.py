@@ -1,4 +1,5 @@
 import csv
+import re
 import unittest
 from collections import Counter
 from pathlib import Path
@@ -14,6 +15,28 @@ def read_csv(filename: str) -> list[dict[str, str]]:
 
 
 class TestMetadataFiles(unittest.TestCase):
+    def test_evaluation_pair_benchmark_is_balanced_and_valid(self):
+        rows = read_csv("evaluation_pairs.csv")
+        relationship_counts = Counter(row["relationship"] for row in rows)
+        normalized_pairs = [
+            tuple(sorted((row["first"], row["second"]))) for row in rows
+        ]
+        token_pattern = re.compile(r"[a-z0-9]+(?:_[a-z0-9]+)*")
+
+        self.assertEqual(len(rows), 60)
+        self.assertEqual(relationship_counts, {"related": 30, "unrelated": 30})
+        self.assertEqual(len(normalized_pairs), len(set(normalized_pairs)))
+        self.assertTrue(all(row["first"] != row["second"] for row in rows))
+        self.assertTrue(
+            all(
+                token_pattern.fullmatch(row[column])
+                for row in rows
+                for column in ("first", "second")
+            )
+        )
+        self.assertTrue(all(row["category"].strip() for row in rows))
+        self.assertTrue(all(row["rationale"].strip() for row in rows))
+
     def test_target_term_taxonomy_is_valid(self):
         rows = read_csv("target_terms.csv")
         terms = [row["term"].strip().lower() for row in rows]

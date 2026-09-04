@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import re
 from dataclasses import dataclass
@@ -22,6 +23,7 @@ DEFAULT_NEIGHBOUR_TERMS = (
     "cash_and_cash_equivalents", "operating_profit",
 )
 KNOWN_VALID_TRUNCATION_COLLISIONS = {"missions"}
+DEFAULT_EVALUATION_PAIRS_PATH = METADATA_DIR / "evaluation_pairs.csv"
 
 
 @dataclass(frozen=True, slots=True)
@@ -31,27 +33,46 @@ class EvaluationPair:
     first: str
     second: str
     relationship: str
+    category: str = "unspecified"
+    rationale: str = ""
 
     def __post_init__(self) -> None:
         if self.relationship not in {"related", "unrelated"}:
             raise ValueError("relationship must be 'related' or 'unrelated'.")
+        if self.first == self.second:
+            raise ValueError("An evaluation pair must contain two different tokens.")
 
 
-DEFAULT_EVALUATION_PAIRS = (
-    EvaluationPair("net_profit", "profit_after_tax", "related"),
-    EvaluationPair("credit_risk", "market_risk", "related"),
-    EvaluationPair("cash", "liquidity", "related"),
-    EvaluationPair("dividend", "shareholder", "related"),
-    EvaluationPair("revenue", "profit", "related"),
-    EvaluationPair("working_capital", "liquidity", "related"),
-    EvaluationPair("fair_value", "amortised_cost", "related"),
-    EvaluationPair("dividend", "cybersecurity", "unrelated"),
-    EvaluationPair("loan", "employee", "unrelated"),
-    EvaluationPair("revenue", "water_consumption", "unrelated"),
-    EvaluationPair("credit_risk", "dividend", "unrelated"),
-    EvaluationPair("fair_value", "employee", "unrelated"),
-    EvaluationPair("net_profit", "cybersecurity", "unrelated"),
-)
+def load_evaluation_pairs(path: str | Path) -> tuple[EvaluationPair, ...]:
+    """Load and validate the version-controlled semantic benchmark."""
+
+    required_columns = {"first", "second", "relationship", "category", "rationale"}
+    with Path(path).open(encoding="utf-8", newline="") as file:
+        reader = csv.DictReader(file)
+        if reader.fieldnames is None or set(reader.fieldnames) != required_columns:
+            raise ValueError(
+                "Evaluation-pair CSV must contain exactly: "
+                + ", ".join(sorted(required_columns))
+            )
+        pairs = tuple(
+            EvaluationPair(
+                first=row["first"].strip(),
+                second=row["second"].strip(),
+                relationship=row["relationship"].strip(),
+                category=row["category"].strip(),
+                rationale=row["rationale"].strip(),
+            )
+            for row in reader
+        )
+
+    if not pairs:
+        raise ValueError("Evaluation-pair CSV cannot be empty.")
+    if any(not pair.first or not pair.second or not pair.category or not pair.rationale for pair in pairs):
+        raise ValueError("Every evaluation pair must contain non-empty fields.")
+    normalized_pairs = [tuple(sorted((pair.first, pair.second))) for pair in pairs]
+    if len(normalized_pairs) != len(set(normalized_pairs)):
+        raise ValueError("Evaluation-pair CSV contains duplicate or reversed pairs.")
+    return pairs
 
 
 def target_model_token(target: TargetTerm) -> str | None:
@@ -136,7 +157,7 @@ def evaluate_target_coverage(
 
 def evaluate_similarity_pairs(
     vectors: KeyedVectors,
-    pairs: tuple[EvaluationPair, ...] = DEFAULT_EVALUATION_PAIRS,
+    pairs: tuple[EvaluationPair, ...],
 ) -> dict[str, object]:
     """Compare curated related similarities with unrelated controls."""
 
@@ -149,6 +170,8 @@ def evaluate_similarity_pairs(
                 "first": pair.first,
                 "second": pair.second,
                 "relationship": pair.relationship,
+                "category": pair.category,
+                "rationale": pair.rationale,
                 "reason": f"missing vocabulary: {', '.join(missing)}",
             })
             continue
@@ -156,6 +179,8 @@ def evaluate_similarity_pairs(
             "first": pair.first,
             "second": pair.second,
             "relationship": pair.relationship,
+            "category": pair.category,
+            "rationale": pair.rationale,
             "cosine_similarity": round(float(vectors.similarity(pair.first, pair.second)), 4),
         })
 
@@ -241,7 +266,7 @@ def evaluate_model(
     vectors: KeyedVectors,
     target_terms: list[TargetTerm],
     training_report: dict[str, object],
-    pairs: tuple[EvaluationPair, ...] = DEFAULT_EVALUATION_PAIRS,
+    pairs: tuple[EvaluationPair, ...],
     neighbour_terms: tuple[str, ...] = DEFAULT_NEIGHBOUR_TERMS,
 ) -> dict[str, object]:
     """Return the complete baseline model evaluation report."""
@@ -293,6 +318,7 @@ def load_training_report(path: str | Path) -> dict[str, object]:
 def evaluate_saved_model(
     artifact_directory: str | Path = ARTIFACTS_DIR,
     target_terms_path: str | Path = METADATA_DIR / "target_terms.csv",
+    evaluation_pairs_path: str | Path = DEFAULT_EVALUATION_PAIRS_PATH,
 ) -> dict[str, object]:
     """Load and evaluate the locally saved baseline model."""
 
@@ -302,6 +328,7 @@ def evaluate_saved_model(
         vectors,
         load_target_terms(target_terms_path),
         load_training_report(directory / "training_report.json"),
+        load_evaluation_pairs(evaluation_pairs_path),
     )
 
 
@@ -328,12 +355,17 @@ def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Evaluate the saved Indian financial Word2Vec model.")
     parser.add_argument("--artifact-dir", default=str(ARTIFACTS_DIR))
     parser.add_argument("--target-terms", default=str(METADATA_DIR / "target_terms.csv"))
+    parser.add_argument("--evaluation-pairs", default=str(DEFAULT_EVALUATION_PAIRS_PATH))
     return parser.parse_args()
 
 
 def main() -> None:
     arguments = parse_arguments()
-    report = evaluate_saved_model(arguments.artifact_dir, arguments.target_terms)
+    report = evaluate_saved_model(
+        arguments.artifact_dir,
+        arguments.target_terms,
+        arguments.evaluation_pairs,
+    )
     output_path = save_evaluation_report(report, arguments.artifact_dir)
     print(output_path.read_text(encoding="utf-8"))
     print(f"Saved evaluation report: {output_path}")

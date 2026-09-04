@@ -1,0 +1,61 @@
+first,second,relationship,category,rationale
+net_profit,profit_after_tax,related,financial_performance,Both represent post-expense profitability measures
+operating_profit,ebit,related,financial_performance,Both describe operating earnings before financing and tax effects
+operating_profit,ebitda,related,financial_performance,Both are operating performance measures
+revenue,revenues,related,financial_performance,Singular and plural forms of the same financial concept
+profit,loss,related,financial_performance,Opposite outcomes reported in the same accounting context
+dividend,interim_dividend,related,corporate_actions,An interim dividend is a type of dividend
+dividend,final_dividend,related,corporate_actions,A final dividend is a type of dividend
+earnings_per_share,eps,related,financial_performance,Full term and standard abbreviation
+current_assets,current_liabilities,related,balance_sheet,Both are short-term balance-sheet classifications
+trade_receivables,trade_payables,related,balance_sheet,Both arise from operating trade balances
+cash_and_cash_equivalents,overdrafts,related,cash_flow_and_liquidity,Both commonly appear in cash-position disclosures
+working_capital,liquidity,related,cash_flow_and_liquidity,Working capital is closely connected to short-term liquidity
+capital_expenditure,investing_activities,related,cash_flow_and_liquidity,Capital expenditure commonly appears in investing cash flows
+financing_activities,borrowings,related,cash_flow_and_liquidity,Borrowings commonly generate financing cash flows
+credit_risk,market_risk,related,risk_management,Both are major financial risk categories
+credit_risk,interest_rate_risk,related,risk_management,Both are financial exposure categories
+liquidity,liquidity_risk,related,risk_management,The risk term directly concerns liquidity availability
+fair_value,fvtoci,related,accounting_and_ind_as,FVTOCI is a fair-value measurement classification
+fair_value,fvoci,related,accounting_and_ind_as,FVOCI is a fair-value accounting classification
+deferred_tax,current_tax,related,accounting_and_ind_as,Both are components of income-tax accounting
+independent_director,board_of_directors,related,corporate_governance,Independent directors serve on the board
+audit_committee,internal_financial_controls,related,corporate_governance,Audit committees oversee financial controls
+related_party,related_party_transaction,related,corporate_governance,Related-party transactions involve related parties
+corporate_social_responsibility,sustainability,related,sustainability,Corporate responsibility commonly forms part of sustainability reporting
+energy_consumption,water_consumption,related,sustainability,Both are operational resource-use measures
+greenhouse_gas_emissions,emissions,related,sustainability,One is a specific form of emissions disclosure
+share_capital,shareholder,related,balance_sheet,Shareholders provide and hold share capital
+retained_earnings,reserves_and_surplus,related,balance_sheet,Both describe accumulated equity balances
+capital_adequacy,loan_book,related,banking,Both are central banking balance-sheet concepts
+trade_receivables,expected_credit_loss,related,accounting_and_ind_as,Expected credit losses are assessed on receivable exposures
+dividend,cybersecurity,unrelated,cross_domain_control,Distribution policy and information security are different concepts
+revenue,water_consumption,unrelated,cross_domain_control,Financial inflows and resource consumption measure different subjects
+loan,employee,unrelated,cross_domain_control,Lending assets and personnel are different concepts
+fair_value,employee,unrelated,cross_domain_control,Accounting measurement and personnel are different concepts
+net_profit,cybersecurity,unrelated,cross_domain_control,Profit outcome and information security are different concepts
+credit_risk,dividend,unrelated,cross_domain_control,Credit exposure and shareholder distribution are different concepts
+audit_committee,energy_consumption,unrelated,cross_domain_control,Governance oversight and energy use are different concepts
+deferred_tax,workforce,unrelated,cross_domain_control,Tax timing and workforce composition are different concepts
+trade_receivables,greenhouse_gas_emissions,unrelated,cross_domain_control,Trade balances and environmental emissions are different concepts
+liquidity,board_of_directors,unrelated,cross_domain_control,Funding availability and a governance body are different concepts
+capital_expenditure,remuneration,unrelated,cross_domain_control,Asset investment and compensation are different concepts
+current_assets,cybersecurity,unrelated,cross_domain_control,Balance-sheet classification and information security are different concepts
+earnings_per_share,water_consumption,unrelated,cross_domain_control,Per-share earnings and resource use are different measures
+market_risk,final_dividend,unrelated,cross_domain_control,Market exposure and shareholder distribution are different concepts
+shareholder,emissions,unrelated,cross_domain_control,Ownership and environmental output are different concepts
+working_capital,independent_director,unrelated,cross_domain_control,Operating liquidity and board status are different concepts
+retained_earnings,energy_consumption,unrelated,cross_domain_control,Accumulated equity and energy use are different concepts
+operating_profit,audit_committee,unrelated,cross_domain_control,Operating result and governance committee are different concepts
+financing_activities,water_consumption,unrelated,cross_domain_control,Funding cash flows and resource use are different concepts
+cash_and_cash_equivalents,remuneration,unrelated,cross_domain_control,Cash holdings and compensation are different concepts
+credit_risk,corporate_social_responsibility,unrelated,cross_domain_control,Credit exposure and social responsibility are different concepts
+revenue,secretarial_audit,unrelated,cross_domain_control,Operating income and compliance audit are different concepts
+dividend,trade_receivables,unrelated,cross_domain_control,Shareholder distribution and customer balances are different concepts
+fair_value,board_of_directors,unrelated,cross_domain_control,Measurement basis and governance body are different concepts
+liquidity,nomination_and_remuneration_committee,unrelated,cross_domain_control,Funding position and board nomination oversight are different concepts
+expected_credit_loss,water_consumption,unrelated,cross_domain_control,Credit impairment and resource use are different concepts
+capital_adequacy,energy_consumption,unrelated,cross_domain_control,Bank capital strength and energy use are different concepts
+market_risk,share_capital,unrelated,cross_domain_control,Market exposure and contributed equity are different concepts
+audit_committee,overdraft,unrelated,cross_domain_control,Governance committee and borrowing facility are different concepts
+profit,cybersecurity,unrelated,cross_domain_control,Financial outcome and information security are different concepts
