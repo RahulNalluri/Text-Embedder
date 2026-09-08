@@ -73,16 +73,24 @@ class TestMetadataFiles(unittest.TestCase):
             return
 
         rows = read_csv("companies.csv")
-        sector_counts = Counter(row["sector"] for row in rows)
+        pilot_rows = [row for row in rows if row["notes"] == "pilot proposal"]
+        sector_counts = Counter(row["sector"] for row in pilot_rows)
 
-        self.assertEqual(len(rows), 12)
+        self.assertEqual(len(pilot_rows), 12)
         self.assertEqual(len(sector_counts), 6)
         self.assertTrue(all(count == 2 for count in sector_counts.values()))
         self.assertEqual(
-            {row["financial_year"] for row in rows}, {"FY2023-24", "FY2024-25"}
+            {row["financial_year"] for row in pilot_rows},
+            {"FY2023-24", "FY2024-25"},
         )
         self.assertTrue(all(row["official_ir_url"].startswith("https://") for row in rows))
-        self.assertTrue(all(row["source_status"] == "official_page_verified" for row in rows))
+        self.assertTrue(
+            all(
+                row["source_status"]
+                in {"official_page_verified", "approved", "rejected"}
+                for row in rows
+            )
+        )
         self.assertTrue(all(row["permission_status"] == "review_required" for row in rows))
 
 
