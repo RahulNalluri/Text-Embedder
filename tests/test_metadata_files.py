@@ -7,6 +7,9 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 METADATA_DIR = PROJECT_ROOT / "data" / "metadata"
+VERSION_3_REPORTS_DIR = (
+    PROJECT_ROOT / "data" / "raw" / "annual_reports" / "version_3"
+)
 
 
 def read_csv(filename: str) -> list[dict[str, str]]:
@@ -92,6 +95,31 @@ class TestMetadataFiles(unittest.TestCase):
             )
         )
         self.assertTrue(all(row["permission_status"] == "review_required" for row in rows))
+
+        staged_rows = [row for row in rows if row["local_filename"].strip()]
+        self.assertTrue(
+            all(
+                re.fullmatch(r"FY\d{4}-\d{2}", row["financial_year"])
+                for row in staged_rows
+            )
+        )
+        self.assertEqual(
+            len([row["local_filename"] for row in staged_rows]),
+            len({row["local_filename"] for row in staged_rows}),
+        )
+        self.assertFalse(
+            any("requires FY2024-25" in row["notes"] for row in staged_rows)
+        )
+
+        for row in staged_rows:
+            if row["source_status"] not in {"approved", "rejected"}:
+                continue
+            expected_path = (
+                VERSION_3_REPORTS_DIR
+                / row["source_status"]
+                / row["local_filename"]
+            )
+            self.assertTrue(expected_path.is_file(), expected_path)
 
 
 if __name__ == "__main__":

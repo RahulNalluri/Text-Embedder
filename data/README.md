@@ -27,6 +27,9 @@ ignored by Git so company selections and report URLs are not published.
 ## Collection policy
 
 - Use annual reports from official company investor-relations pages.
+- The training corpus may include multiple financial years. Record each
+  report's true year in the manifest and filename; do not relabel a report to
+  force it into a single-year batch.
 - Record the exact source URL in your local `metadata/companies.csv`.
 - Review each source's terms before downloading or processing its report.
 - Do not automate collection from NSE; its terms prohibit systematic automated collection.
@@ -71,6 +74,11 @@ moved or renamed while the Version 2 baseline is being preserved.
 
 The corpus builder accepts explicit `--pdf` arguments. Only paths inside the
 `approved/` folder should be supplied when building the Version 3 corpus.
+
+Version 3 is a multi-company, multi-sector, multi-year corpus. A different
+financial year is not, by itself, a rejection reason. When multiple reports
+from the same company are available, approve only the reports that add useful
+coverage after checking repeated boilerplate and company-level corpus balance.
 
 ## Pilot design
 

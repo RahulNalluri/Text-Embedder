@@ -173,6 +173,12 @@ Before training, the expanded corpus must satisfy all of the following:
 - No failed or duplicate document is included.
 - Every report has its sector, financial year, and official source recorded in
   the private local manifest.
+- Reports may span multiple financial years. Each report must retain its true
+  year in both the manifest and filename.
+- A report is not rejected only because its financial year differs from other
+  reports in the corpus.
+- Additional reports from a company already represented in the corpus require
+  a duplicate-content and company-balance review before approval.
 - No single document supplies more than 20% of all corpus tokens.
 - The preprocessing and phrase-detection stages complete without warnings that
   invalidate the corpus.
