@@ -80,6 +80,11 @@ def evaluate_corpus_quality(
     vocabulary = set(token_counts)
     total_tokens = sum(token_counts.values())
     average_sentence_length = total_tokens / len(sentences)
+    sentence_counts = Counter(tuple(sentence) for sentence in sentences)
+    repeated_sentence_occurrences = sum(
+        count - 1 for count in sentence_counts.values() if count > 1
+    )
+    repeated_sentence_share = repeated_sentence_occurrences / len(sentences)
 
     covered_terms = [
         target
@@ -99,6 +104,9 @@ def evaluate_corpus_quality(
 
     documents = corpus_metadata.get("documents", [])
     document_shares = []
+    company_tokens: Counter[str] = Counter()
+    sector_tokens: Counter[str] = Counter()
+    financial_year_tokens: Counter[str] = Counter()
     if isinstance(documents, list):
         for document in documents:
             if not isinstance(document, dict):
@@ -111,6 +119,11 @@ def evaluate_corpus_quality(
                     "share_of_corpus": round(token_count / total_tokens, 4),
                 }
             )
+            company_tokens[str(document.get("company_name") or "unknown")] += token_count
+            sector_tokens[str(document.get("sector") or "unknown")] += token_count
+            financial_year_tokens[
+                str(document.get("financial_year") or "unknown")
+            ] += token_count
 
     warnings: list[str] = []
     largest_document_share = max(
@@ -119,12 +132,17 @@ def evaluate_corpus_quality(
     core_coverage = priority_covered["core"] / max(priority_totals["core"], 1)
     if int(corpus_metadata.get("documents_failed", 0)):
         warnings.append("One or more selected documents failed during corpus construction.")
-    if largest_document_share > 0.30:
-        warnings.append("One document contributes more than 30% of all corpus tokens.")
+    if largest_document_share > 0.20:
+        warnings.append("One document contributes more than 20% of all corpus tokens.")
     if core_coverage < 0.70:
         warnings.append("Fewer than 70% of core target terms have component-token coverage.")
     if token_counts["<number>"] / total_tokens > 0.10:
         warnings.append("The <number> token exceeds 10% of the corpus; review numeric-table noise.")
+    if repeated_sentence_share > 0.10:
+        warnings.append(
+            "Exact repeated sentences exceed 10% of the corpus; review annual-report "
+            "boilerplate before training."
+        )
 
     return {
         "documents_processed": int(corpus_metadata.get("documents_processed", 0)),
@@ -132,6 +150,15 @@ def evaluate_corpus_quality(
         "token_count": total_tokens,
         "vocabulary_size": len(vocabulary),
         "average_sentence_length": round(average_sentence_length, 2),
+        "exact_duplicate_sentences": {
+            "unique_repeated_sentences": sum(
+                1 for count in sentence_counts.values() if count > 1
+            ),
+            "repeated_occurrences": repeated_sentence_occurrences,
+            "share_of_sentences": round(
+                repeated_sentence_share, 4
+            ),
+        },
         "most_common_tokens": [
             {"token": token, "count": count}
             for token, count in token_counts.most_common(top_token_limit)
@@ -149,6 +176,11 @@ def evaluate_corpus_quality(
             document_shares,
             key=lambda document: document["share_of_corpus"],
             reverse=True,
+        ),
+        "company_token_shares": _group_token_shares(company_tokens, total_tokens),
+        "sector_token_shares": _group_token_shares(sector_tokens, total_tokens),
+        "financial_year_token_shares": _group_token_shares(
+            financial_year_tokens, total_tokens
         ),
         "target_term_component_coverage": {
             "covered_terms": len(covered_terms),
@@ -178,10 +210,26 @@ def evaluate_corpus_quality(
         },
         "warnings": warnings,
         "recommended_next_step": (
-            "Review high-frequency tokens and missing core terms, then add phrase "
-            "detection before training Word2Vec."
+            "Review warnings and phrase-detection output, then train and evaluate "
+            "the Version 3 Word2Vec model."
         ),
     }
+
+
+def _group_token_shares(
+    token_counts: Counter[str],
+    total_tokens: int,
+) -> list[dict[str, object]]:
+    """Return descending token totals and shares for one metadata dimension."""
+
+    return [
+        {
+            "name": name,
+            "token_count": count,
+            "share_of_corpus": round(count / total_tokens, 4),
+        }
+        for name, count in token_counts.most_common()
+    ]
 
 
 def evaluate_saved_corpus(

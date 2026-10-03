@@ -80,6 +80,22 @@ financial year is not, by itself, a rejection reason. When multiple reports
 from the same company are available, approve only the reports that add useful
 coverage after checking repeated boilerplate and company-level corpus balance.
 
+### Reproducible Version 3 build
+
+After the private manifest and approved directory contain the final reports,
+run the complete local build with:
+
+```powershell
+python -m training.version3_pipeline
+```
+
+The pipeline verifies that the manifest and approved directory contain the
+same 20 reports, checks every recorded SHA-256 digest, removes recurring short
+page-edge headers and footers, preserves per-document processed text, evaluates
+corpus balance, and creates the phrase-aware corpus. It writes to
+`data/processed/version_3/` so the preserved Version 2 outputs are not
+overwritten.
+
 ## Pilot design
 
 The first pilot targets one company from each of six sectors and two completed financial years per company. Proposed companies are not approved sources until their investor-relations URL and reuse status have been verified.
@@ -96,6 +112,9 @@ data/processed/quality_report.json
 data/processed/sentences_phrased.txt
 data/processed/phrase_counts.csv
 data/processed/phrase_report.json
+data/processed/version_3/dataset_inventory.json
+data/processed/version_3/documents/*.txt
+data/processed/version_3/version3_build_summary.json
 ```
 
 These generated files should be reproducible from the source manifest and processing scripts.

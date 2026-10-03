@@ -109,6 +109,11 @@ def tokenize_financial_sentence(sentence: str) -> list[str]:
             tokens.append("rupee")
         elif token == "%":
             tokens.append("percent")
+        elif len(token) == 1 and token.isalpha() and token not in {"a", "i"}:
+            # Annual-report tables frequently expose column labels such as
+            # b, c, h, and i as standalone tokens. They add no useful semantic
+            # context, while the English words "a" and "i" remain meaningful.
+            continue
         else:
             tokens.append(token)
     return tokens

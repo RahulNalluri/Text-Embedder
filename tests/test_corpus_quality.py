@@ -25,8 +25,20 @@ class TestCorpusQuality(unittest.TestCase):
                     "documents_processed": 2,
                     "documents_failed": 0,
                     "documents": [
-                        {"source_filename": "first.pdf", "token_count": 4},
-                        {"source_filename": "second.pdf", "token_count": 3},
+                        {
+                            "source_filename": "first.pdf",
+                            "token_count": 4,
+                            "company_name": "First Company",
+                            "sector": "banking",
+                            "financial_year": "FY2024-25",
+                        },
+                        {
+                            "source_filename": "second.pdf",
+                            "token_count": 3,
+                            "company_name": "Second Company",
+                            "sector": "technology",
+                            "financial_year": "FY2025-26",
+                        },
                     ],
                 }
             ),
@@ -60,6 +72,11 @@ class TestCorpusQuality(unittest.TestCase):
             ["borrowings"],
         )
         self.assertEqual(report["document_token_shares"][0]["source_filename"], "first.pdf")
+        self.assertEqual(report["company_token_shares"][0]["name"], "First Company")
+        self.assertEqual(report["sector_token_shares"][0]["name"], "banking")
+        self.assertEqual(
+            report["exact_duplicate_sentences"]["repeated_occurrences"], 0
+        )
 
     def test_saves_quality_report(self):
         report = evaluate_saved_corpus(self.directory, self.target_terms_path)
@@ -68,6 +85,21 @@ class TestCorpusQuality(unittest.TestCase):
         self.assertTrue(output_path.exists())
         saved_report = json.loads(output_path.read_text(encoding="utf-8"))
         self.assertEqual(saved_report["sentence_count"], 3)
+
+    def test_warns_when_exact_repeated_sentences_exceed_ten_percent(self):
+        sentences = [["revenue", "increased"]] * 3 + [["cash", "improved"]]
+        (self.directory / "sentences.txt").write_text(
+            "\n".join(" ".join(sentence) for sentence in sentences) + "\n",
+            encoding="utf-8",
+        )
+
+        report = evaluate_saved_corpus(self.directory, self.target_terms_path)
+
+        self.assertIn(
+            "Exact repeated sentences exceed 10% of the corpus; review "
+            "annual-report boilerplate before training.",
+            report["warnings"],
+        )
 
 
 if __name__ == "__main__":

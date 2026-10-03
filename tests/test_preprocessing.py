@@ -55,6 +55,16 @@ class TestPreprocessing(unittest.TestCase):
             ["revenue", "was", "rupee", "<number>", "crore", "up", "<number>", "percent"],
         )
 
+    def test_removes_single_letter_table_labels_but_keeps_words(self):
+        tokens = tokenize_financial_sentence(
+            "A company reported columns B C H while I reviewed it."
+        )
+
+        self.assertEqual(
+            tokens,
+            ["a", "company", "reported", "columns", "while", "i", "reviewed", "it"],
+        )
+
     def test_preserves_words_with_curly_apostrophes(self):
         normalized = normalize_pdf_text("The Company\u2019s revenue increased.")
 

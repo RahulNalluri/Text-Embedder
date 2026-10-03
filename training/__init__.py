@@ -8,6 +8,9 @@ from .config import (
     PROCESSED_DATA_DIR,
     PROJECT_ROOT,
     RAW_DATA_DIR,
+    VERSION_3_APPROVED_DIR,
+    VERSION_3_PROCESSED_DIR,
+    VERSION_3_REPORTS_DIR,
     TrainingConfig,
 )
 
@@ -19,5 +22,8 @@ __all__ = [
     "PROCESSED_DATA_DIR",
     "PROJECT_ROOT",
     "RAW_DATA_DIR",
+    "VERSION_3_APPROVED_DIR",
+    "VERSION_3_PROCESSED_DIR",
+    "VERSION_3_REPORTS_DIR",
     "TrainingConfig",
 ]
