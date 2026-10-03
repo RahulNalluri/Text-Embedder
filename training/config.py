@@ -13,6 +13,7 @@ ARTIFACTS_DIR = PROJECT_ROOT / "artifacts" / "indian_financial"
 VERSION_3_REPORTS_DIR = RAW_DATA_DIR / "version_3"
 VERSION_3_APPROVED_DIR = VERSION_3_REPORTS_DIR / "approved"
 VERSION_3_PROCESSED_DIR = PROCESSED_DATA_DIR / "version_3"
+VERSION_3_ARTIFACTS_DIR = ARTIFACTS_DIR / "version_3"
 
 
 @dataclass(frozen=True, slots=True)

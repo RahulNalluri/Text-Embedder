@@ -123,6 +123,20 @@ Open the local URL printed by Streamlit, normally `http://localhost:8501`.
 python -m unittest discover -s tests -v
 ```
 
+## Training the Version 3 financial model
+
+After the private annual-report corpus has been built and validated with
+`python -m training.version3_pipeline`, train the frozen phrase corpus with:
+
+```powershell
+python -m training.version3_trainer
+```
+
+The command verifies the corpus checksums before training and writes a separate
+model package to `artifacts/indian_financial/version_3/`. It includes the model,
+query vectors, training provenance, and copied corpus audit reports. It refuses
+to overwrite an existing Version 3 package.
+
 ## How to use the application
 
 1. Enter or edit the training corpus.
